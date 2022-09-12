@@ -4,8 +4,11 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
+// const bcrypt = require("bcrypt");
+// const saltRounds = 10;
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local=mongoose");
 
 const app = express();
 app.use(express.static("public"));
@@ -34,44 +37,45 @@ app.get("/", function (req, res) {
 app.get("/login", function (req, res) {
   res.render("login");
 });
-app.post("/login", function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-  User.findOne({ email: username }, function (err, foundUser) {
-    if (err) {
-      console.log(err);
-    } else {
-      if (foundUser) {
-        // if (foundUser.password === password) {
-        //   res.render("secret");
-        // }
-        bcrypt.compare(password, foundUser.password, function (err, results) {
-          if (results === true) {
-            res.render("secret");
-          }
-        });
-      }
-    }
-  });
-});
+app.post("/login", function (req, res) {});
 app.get("/register", function (req, res) {
   res.render("register");
 });
-app.post("/register", function (req, res) {
-  bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-    const newUser = new User({
-      email: req.body.username,
-      password: hash,
-    });
-    newUser.save(function (err) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.render("secret");
-      }
-    });
-  });
-});
+app.post("/register", function (req, res) {});
 app.listen(5000, function () {
   console.log("server started on port 5000");
 });
+
+// bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+//   const newUser = new User({
+//     email: req.body.username,
+//     password: hash,
+//   });
+//   newUser.save(function (err) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       res.render("secret");
+//     }
+//   });
+// });
+
+//#login
+// const username = req.body.username;
+//   const password = req.body.password;
+//   User.findOne({ email: username }, function (err, foundUser) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       if (foundUser) {
+//         // if (foundUser.password === password) {
+//         //   res.render("secret");
+//         // }
+//         bcrypt.compare(password, foundUser.password, function (err, results) {
+//           if (results === true) {
+//             res.render("secret");
+//           }
+//         });
+//       }
+//     }
+//   });
