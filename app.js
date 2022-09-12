@@ -53,7 +53,33 @@ app.get("/", function (req, res) {
 app.get("/login", function (req, res) {
   res.render("login");
 });
+app.get("/secrets", function (req, res) {
+  if (req.isAuthenticated) {
+    res.render("secret");
+  } else {
+    res.redirect("/login");
+  }
+});
 app.post("/login", function (req, res) {
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password,
+  });
+
+  req.logIn(user, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.redirect("/secrets");
+      });
+    }
+  });
+});
+app.get("/register", function (req, res) {
+  res.render("register");
+});
+app.post("/register", function (req, res) {
   User.register(
     { username: req.body.username },
     req.body.password,
@@ -61,14 +87,19 @@ app.post("/login", function (req, res) {
       if (err) {
         console.log(err);
         res.redirect("/register");
+      } else {
+        passport.authenticate("local")(req, res, function () {
+          res.redirect("/secrets");
+        });
       }
     }
   );
 });
-app.get("/register", function (req, res) {
-  res.render("register");
+app.get("/logout", function (req, res) {
+  req.logout();
+
+  res.redirect("/");
 });
-app.post("/register", function (req, res) {});
 app.listen(5000, function () {
   console.log("server started on port 5000");
 });
