@@ -53,7 +53,18 @@ app.get("/", function (req, res) {
 app.get("/login", function (req, res) {
   res.render("login");
 });
-app.post("/login", function (req, res) {});
+app.post("/login", function (req, res) {
+  User.register(
+    { username: req.body.username },
+    req.body.password,
+    function (err, user) {
+      if (err) {
+        console.log(err);
+        res.redirect("/register");
+      }
+    }
+  );
+});
 app.get("/register", function (req, res) {
   res.render("register");
 });
