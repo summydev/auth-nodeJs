@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 // const saltRounds = 10;
 const session = require("express-session");
 const passport = require("passport");
-const passportLocalMongoose = require("passport-local=mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const app = express();
 app.use(express.static("public"));
@@ -29,6 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/userDB", { useNewUrlParser: true });
+//mongoose.set("useCreateIndex", true);
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -45,7 +46,6 @@ const User = new mongoose.model("user", userSchema);
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
 
 app.get("/", function (req, res) {
   res.render("home");
