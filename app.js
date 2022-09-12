@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
 });
-userSchema.plugin(passportLocalMongoose)
+userSchema.plugin(passportLocalMongoose);
 
 // userSchema.plugin(encrypt, {
 //   secret: process.env.SECRET,
@@ -42,7 +42,11 @@ userSchema.plugin(passportLocalMongoose)
 // });
 
 const User = new mongoose.model("user", userSchema);
-passport.use
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 app.get("/", function (req, res) {
   res.render("home");
 });
