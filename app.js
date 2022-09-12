@@ -42,6 +42,7 @@ userSchema.plugin(passportLocalMongoose)
 // });
 
 const User = new mongoose.model("user", userSchema);
+passport.use
 app.get("/", function (req, res) {
   res.render("home");
 });
