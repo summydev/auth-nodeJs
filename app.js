@@ -80,17 +80,27 @@ passport.use(
 app.get("/", function (req, res) {
   res.render("home");
 });
+// app.get(
+//   "/auth/google",
+//   passport.authenticate("google", { scope: ["profile"] })
+// );
+// app.get(
+//   "/auth/google/secrets",
+//   passport.authenticate("google", { failureRedirect: ["/login"] }),
+//   function (req, res) {
+//     res.redirect("/secrets");
+//   }
+// );
+
 app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile"] })
+  "/auth",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
 );
-app.get(
-  "/auth/google/secrets",
-  passport.authenticate("google", { failureRedirect: ["/login"] }),
-  function (req, res) {
-    res.redirect("/secrets");
-  }
-);
+
+app.get("/auth/google/secrets", passport.authenticate("google"));
+
 app.get("/login", function (req, res) {
   res.render("login");
 });
