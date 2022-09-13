@@ -81,8 +81,12 @@ app.get("/", function (req, res) {
   res.render("home");
 });
 app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+app.get(
   "/auth/google/secrets",
-  passport.authenticate("google", { scope: ["profile"] }),
+  passport.authenticate("google", { failureRedirect: ["/login"] }),
   function (req, res) {
     res.redirect("/secrets");
   }
