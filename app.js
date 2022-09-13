@@ -58,6 +58,7 @@ passport.use(
       userProfileUrl: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     function (accessToken, refreshToken, profile, cb) {
+      console.log(profile);
       User.findOrCreate(
         {
           googleId: profile.id,
@@ -73,11 +74,13 @@ passport.use(
 app.get("/", function (req, res) {
   res.render("home");
 });
-app.get("/auth/google/secrets", 
-passport.authenticate("google", { failureRedirect: "/login"}),
-function (req, res) {
-res.redirect("/secrets")
-});
+app.get(
+  "/auth/google/secrets",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    res.redirect("/secrets");
+  }
+);
 app.get("/login", function (req, res) {
   res.render("login");
 });
