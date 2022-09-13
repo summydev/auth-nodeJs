@@ -130,7 +130,18 @@ app.get("/submit", function (req, res) {
 });
 app.post("/submit", function (req, res) {
   const submittedSecret = req.body.secret;
-  User.fin;
+  User.findById(req.user.id, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUser) {
+        foundUser.secret = submittedSecret;
+        foundUser.save(function () {
+          res.redirect("/secrets");
+        });
+      }
+    }
+  });
 });
 app.post("/login", function (req, res) {
   const user = new User({
