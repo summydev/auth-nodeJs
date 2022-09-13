@@ -115,11 +115,16 @@ app.get("/login", function (req, res) {
   res.render("login");
 });
 app.get("/secrets", function (req, res) {
-  if (req.isAuthenticated) {
-    res.render("secret");
-  } else {
-    res.redirect("/login");
-  }
+  User.find({ secret: { $ne: null } }),
+    function (err, foundUsers) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (foundUsers) {
+          res.render("secrets", { userWithSecrets: foundUsers });
+        }
+      }
+    };
 });
 app.get("/submit", function (req, res) {
   if (req.isAuthenticated) {
